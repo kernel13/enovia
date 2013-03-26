@@ -6,7 +6,7 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index    
-    
+    logger.info "====== Start index ======="
     if admin_signed_in?
       if params[:tag]
         @posts = Post.tagged_with(params[:tag]).page(params[:page]).per(10) 
@@ -14,14 +14,17 @@ class PostsController < ApplicationController
         @posts = Post.page(params[:page]).per(10) 
       end
     else
+      logger.info "==========  Search =============="
       @search = Post.search do
           fulltext params[:search]
           paginate :page => params[:page], :per_page => 10
       end
 
       if params[:tag]
+        logger.info "====== tag =========="
         @posts = Post.published.tagged_with(params[:tag]).page(params[:page]).per(10)  
       else 
+         logger.info "======== no tag =========s"
        # @posts = Post.order(:updated_at).page(params[:page]).per(10)  
          @posts = @search.results
       end 
