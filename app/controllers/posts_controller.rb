@@ -15,18 +15,18 @@ class PostsController < ApplicationController
       end
     else
       logger.info "==========  Search =============="
-      @search = Post.search do
-          fulltext params[:search]
-          paginate :page => params[:page], :per_page => 10
-      end
+     # @search = Post.search do
+     #     fulltext params[:search]
+     #     paginate :page => params[:page], :per_page => 10
+     # end
 
       if params[:tag]
         logger.info "====== tag =========="
         @posts = Post.published.tagged_with(params[:tag]).page(params[:page]).per(10)  
       else 
          logger.info "======== no tag =========s"
-       # @posts = Post.order(:updated_at).page(params[:page]).per(10)  
-         @posts = @search.results
+        @posts = Post.order(:updated_at).page(params[:page]).per(10)  
+      #   @posts = @search.results
       end 
     end
 
